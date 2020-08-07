@@ -23,11 +23,18 @@ module.exports = {
   },
 
   async findByEmail(email) {
-    // const email = request.body.email;
     const user = await connection('user')
         .select('*')
         .from('user')
-        .where('email', email);
+        .where('email', email).first();
     return user;
   },
+
+  async findById(id) {
+    const user = await connection('user')
+        .select('*')
+        .from('user')
+        .where('id', id);
+    return user;
+  }
 };
