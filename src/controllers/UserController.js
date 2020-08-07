@@ -3,22 +3,31 @@ const bcrypt = require('bcrypt');
 const connection = require('../database/connection');
 
 module.exports = {
-  async create(request, response) {
-    const {nome, usuario, senha} = request.body;
+  async createUser(request, response) {
+    const {name, email, password} = request.body;
     const id = crypto.randomBytes(4).toString('HEX');
-    const senhaHash = await bcrypt.hash(senha, 10);
-    await connection('usuario').insert({
+    const hashPassword = await bcrypt.hash(password, 10);
+    await connection('user').insert({
       id,
-      nome,
-      usuario,
-      senhaHash,
+      name,
+      email,
+      hashPassword,
     });
 
-    return response.json({id, senha, senhaHash});
+    return response.json({id, password, hashPassword});
   },
 
-  async get(request, response) {
-    const usuarios = await connection('usuario').select('*').from('usuario');
-    return response.json(usuarios);
+  async getUsers(request, response) {
+    const users = await connection('user').select('*').from('user');
+    return response.json(users);
+  },
+
+  async findByEmail(email) {
+    // const email = request.body.email;
+    const user = await connection('user')
+        .select('*')
+        .from('user')
+        .where('email', email);
+    return user;
   },
 };
