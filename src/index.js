@@ -7,23 +7,18 @@ const bodyParser = require("body-parser");
 const userController = require('./controllers/UserController');
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
+const cors = require('cors');
 
 const app = express();
-
-app.use(express.json());
-app.use(routes);
 
 passport.use(new LocalStrategy({
     usernameField: 'email'
 },
     function(email, password, done) {
         console.log(email, password);
-        userController.findByEmail(email).then(async (err, user) => {
-            if (err) {
-                return done(err, {message: "Erro"});
-            }
+        userController.findByEmail(email).then(async (user) => {
             if (!user) {
-                console.log("Usuario nao encontrado")
+                console.log("Usuario nao encotrado")
                 return done(null, false, { message: 'Usuário não existe' });
             }
             console.log("Usuario encontrado")
@@ -47,10 +42,13 @@ passport.deserializeUser((id, cb) => userController.findById(id, (err, user) =>
     err ? cb(err) : cb(null, user)
 ));
 
+app.use(express.json());
+app.use(cors());
 app.use(express.static("public"));
-app.use(session({ secret: 'segredo', resave: false, saveUninitialized: false }));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({ secret: 'segredo', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(routes);
 
 app.listen(3333);

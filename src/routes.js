@@ -3,12 +3,11 @@ const PostController = require('./controllers/PostController');
 const UserController = require('./controllers/UserController');
 const passport = require('passport');
 
-// eslint-disable-next-line new-cap
 const routes = express.Router();
 
-routes.post('/post', PostController.createPost);
+routes.post('/create-post', PostController.createPost);
 
-routes.post('/create', UserController.createUser);
+routes.post('/create-user', UserController.createUser);
 routes.get('/get', UserController.getUsers);
 routes.get('/getByEmail', UserController.findByEmail);
 

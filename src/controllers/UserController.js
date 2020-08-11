@@ -13,8 +13,7 @@ module.exports = {
       email,
       hashPassword,
     });
-
-    return response.json({id, password, hashPassword});
+    return response.json({id});
   },
 
   async getUsers(request, response) {
