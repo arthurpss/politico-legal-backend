@@ -1,17 +1,18 @@
-const crypto = require('crypto');
 const connection = require('../database/connection');
 
 module.exports = {
   async createPost(request, response) {
-    const {title, content} = request.body;
-    const id = crypto.randomBytes(4).toString('HEX');
+    const {title, content, fixado, data_criacao, author} = request.body;
 
     await connection('post').insert({
-      id,
-      title,
-      content,
+      title, content, fixado, data_criacao, author
     });
 
-    return response.json({id});
+    return response.json({title});
   },
+
+  async getPosts(request, response) {
+    const posts = await connection('post').select('*').from('post');
+    return response.json(posts);
+  }
 };

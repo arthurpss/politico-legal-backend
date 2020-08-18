@@ -5,15 +5,15 @@ const connection = require('../database/connection');
 module.exports = {
   async createUser(request, response) {
     const {name, email, password} = request.body;
-    const id = crypto.randomBytes(4).toString('HEX');
+    const user_id = crypto.randomBytes(4).toString('HEX');
     const hashPassword = await bcrypt.hash(password, 10);
     await connection('user').insert({
-      id,
+      user_id,
       name,
       email,
       hashPassword,
     });
-    return response.json({id});
+    return response.json({user_id});
   },
 
   async getUsers(request, response) {
@@ -33,7 +33,7 @@ module.exports = {
     const user = await connection('user')
         .select('*')
         .from('user')
-        .where('id', id);
+        .where('user_id', id);
     return user;
   }
 };

@@ -6,10 +6,11 @@ const passport = require('passport');
 const routes = express.Router();
 
 routes.post('/create-post', PostController.createPost);
+routes.get('/get-posts', PostController.getPosts);
 
 routes.post('/create-user', UserController.createUser);
-routes.get('/get', UserController.getUsers);
-routes.get('/getByEmail', UserController.findByEmail);
+routes.get('/get-users', UserController.getUsers);
+routes.get('/get-user', UserController.findByEmail);
 
 routes.post('/login', passport.authenticate('local', {
     successRedirect: '/',
